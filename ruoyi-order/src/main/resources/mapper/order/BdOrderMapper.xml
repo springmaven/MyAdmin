@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.BdOrderMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.order.domain.BdOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="DATE" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="DATE" property="gmtModified" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+    <result column="mail_no" jdbcType="VARCHAR" property="mailNo" />
+    <result column="out_biz_no" jdbcType="VARCHAR" property="outBizNo" />
+    <result column="from_province" jdbcType="VARCHAR" property="fromProvince" />
+    <result column="from_city" jdbcType="VARCHAR" property="fromCity" />
+    <result column="from_area" jdbcType="VARCHAR" property="fromArea" />
+    <result column="from_address" jdbcType="VARCHAR" property="fromAddress" />
+    <result column="to_province" jdbcType="VARCHAR" property="toProvince" />
+    <result column="to_city" jdbcType="VARCHAR" property="toCity" />
+    <result column="to_area" jdbcType="VARCHAR" property="toArea" />
+    <result column="to_address" jdbcType="VARCHAR" property="toAddress" />
+    <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
+    <result column="clean_address" jdbcType="VARCHAR" property="cleanAddress" />
+    <result column="heka" jdbcType="VARCHAR" property="heka" />
+    <result column="delivery_date" jdbcType="VARCHAR" property="deliveryDate" />
+    <result column="delivery_type" jdbcType="VARCHAR" property="deliveryType" />
+    <result column="distributor" jdbcType="VARCHAR" property="distributor" />
+    <result column="distributor_num" jdbcType="VARCHAR" property="distributorNum" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="is_print" jdbcType="CHAR" property="isPrint" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="sorting_no" jdbcType="VARCHAR" property="sortingNo" />
+    <result column="sender_phone" jdbcType="VARCHAR" property="senderPhone" />
+    <result column="order_price" jdbcType="REAL" property="orderPrice" />
+    <result column="delivery_cost" jdbcType="REAL" property="deliveryCost" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
+    <result column="lng" jdbcType="REAL" property="lng" />
+    <result column="lat" jdbcType="REAL" property="lat" />
+    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
+    <result column="address_unit" jdbcType="VARCHAR" property="addressUnit" />
+    <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, gmt_create, gmt_modified, modifier, creator, is_deleted, mail_no, out_biz_no, 
+    from_province, from_city, from_area, from_address, to_province, to_city, to_area, 
+    to_address, receiver_phone, clean_address, heka, delivery_date, delivery_type, distributor, 
+    distributor_num, `status`, price, img, is_print, sender, client_name, tenant_code, 
+    sorting_no, sender_phone, order_price, delivery_cost, detail, lng, lat, order_source, 
+    address_unit, pay_status
+  </sql>
+  <select id="selectByExample" parameterType="com.ruoyi.order.domain.BdOrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from bd_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bd_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bd_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ruoyi.order.domain.BdOrderExample">
+    delete from bd_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ruoyi.order.domain.BdOrder" useGeneratedKeys="true">
+    insert into bd_order (gmt_create, gmt_modified, modifier, 
+      creator, is_deleted, mail_no, 
+      out_biz_no, from_province, from_city, 
+      from_area, from_address, to_province, 
+      to_city, to_area, to_address, 
+      receiver_phone, clean_address, heka, 
+      delivery_date, delivery_type, distributor, 
+      distributor_num, `status`, price, 
+      img, is_print, sender, 
+      client_name, tenant_code, sorting_no, 
+      sender_phone, order_price, delivery_cost, 
+      detail, lng, lat, order_source, 
+      address_unit, pay_status)
+    values (#{gmtCreate,jdbcType=DATE}, #{gmtModified,jdbcType=DATE}, #{modifier,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{isDeleted,jdbcType=CHAR}, #{mailNo,jdbcType=VARCHAR}, 
+      #{outBizNo,jdbcType=VARCHAR}, #{fromProvince,jdbcType=VARCHAR}, #{fromCity,jdbcType=VARCHAR}, 
+      #{fromArea,jdbcType=VARCHAR}, #{fromAddress,jdbcType=VARCHAR}, #{toProvince,jdbcType=VARCHAR}, 
+      #{toCity,jdbcType=VARCHAR}, #{toArea,jdbcType=VARCHAR}, #{toAddress,jdbcType=VARCHAR}, 
+      #{receiverPhone,jdbcType=VARCHAR}, #{cleanAddress,jdbcType=VARCHAR}, #{heka,jdbcType=VARCHAR}, 
+      #{deliveryDate,jdbcType=VARCHAR}, #{deliveryType,jdbcType=VARCHAR}, #{distributor,jdbcType=VARCHAR}, 
+      #{distributorNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{img,jdbcType=VARCHAR}, #{isPrint,jdbcType=CHAR}, #{sender,jdbcType=VARCHAR}, 
+      #{clientName,jdbcType=VARCHAR}, #{tenantCode,jdbcType=VARCHAR}, #{sortingNo,jdbcType=VARCHAR}, 
+      #{senderPhone,jdbcType=VARCHAR}, #{orderPrice,jdbcType=REAL}, #{deliveryCost,jdbcType=REAL}, 
+      #{detail,jdbcType=VARCHAR}, #{lng,jdbcType=REAL}, #{lat,jdbcType=REAL}, #{orderSource,jdbcType=VARCHAR}, 
+      #{addressUnit,jdbcType=VARCHAR}, #{payStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ruoyi.order.domain.BdOrder" useGeneratedKeys="true">
+    insert into bd_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="mailNo != null">
+        mail_no,
+      </if>
+      <if test="outBizNo != null">
+        out_biz_no,
+      </if>
+      <if test="fromProvince != null">
+        from_province,
+      </if>
+      <if test="fromCity != null">
+        from_city,
+      </if>
+      <if test="fromArea != null">
+        from_area,
+      </if>
+      <if test="fromAddress != null">
+        from_address,
+      </if>
+      <if test="toProvince != null">
+        to_province,
+      </if>
+      <if test="toCity != null">
+        to_city,
+      </if>
+      <if test="toArea != null">
+        to_area,
+      </if>
+      <if test="toAddress != null">
+        to_address,
+      </if>
+      <if test="receiverPhone != null">
+        receiver_phone,
+      </if>
+      <if test="cleanAddress != null">
+        clean_address,
+      </if>
+      <if test="heka != null">
+        heka,
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date,
+      </if>
+      <if test="deliveryType != null">
+        delivery_type,
+      </if>
+      <if test="distributor != null">
+        distributor,
+      </if>
+      <if test="distributorNum != null">
+        distributor_num,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="isPrint != null">
+        is_print,
+      </if>
+      <if test="sender != null">
+        sender,
+      </if>
+      <if test="clientName != null">
+        client_name,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="sortingNo != null">
+        sorting_no,
+      </if>
+      <if test="senderPhone != null">
+        sender_phone,
+      </if>
+      <if test="orderPrice != null">
+        order_price,
+      </if>
+      <if test="deliveryCost != null">
+        delivery_cost,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="orderSource != null">
+        order_source,
+      </if>
+      <if test="addressUnit != null">
+        address_unit,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=DATE},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=DATE},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=CHAR},
+      </if>
+      <if test="mailNo != null">
+        #{mailNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outBizNo != null">
+        #{outBizNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fromProvince != null">
+        #{fromProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="fromCity != null">
+        #{fromCity,jdbcType=VARCHAR},
+      </if>
+      <if test="fromArea != null">
+        #{fromArea,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAddress != null">
+        #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toProvince != null">
+        #{toProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="toCity != null">
+        #{toCity,jdbcType=VARCHAR},
+      </if>
+      <if test="toArea != null">
+        #{toArea,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPhone != null">
+        #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cleanAddress != null">
+        #{cleanAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="heka != null">
+        #{heka,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryDate != null">
+        #{deliveryDate,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryType != null">
+        #{deliveryType,jdbcType=VARCHAR},
+      </if>
+      <if test="distributor != null">
+        #{distributor,jdbcType=VARCHAR},
+      </if>
+      <if test="distributorNum != null">
+        #{distributorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="isPrint != null">
+        #{isPrint,jdbcType=CHAR},
+      </if>
+      <if test="sender != null">
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sortingNo != null">
+        #{sortingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="senderPhone != null">
+        #{senderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null">
+        #{orderPrice,jdbcType=REAL},
+      </if>
+      <if test="deliveryCost != null">
+        #{deliveryCost,jdbcType=REAL},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=REAL},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=REAL},
+      </if>
+      <if test="orderSource != null">
+        #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="addressUnit != null">
+        #{addressUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ruoyi.order.domain.BdOrderExample" resultType="java.lang.Long">
+    select count(*) from bd_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update bd_order
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=DATE},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=DATE},
+      </if>
+      <if test="record.modifier != null">
+        modifier = #{record.modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null">
+        is_deleted = #{record.isDeleted,jdbcType=CHAR},
+      </if>
+      <if test="record.mailNo != null">
+        mail_no = #{record.mailNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outBizNo != null">
+        out_biz_no = #{record.outBizNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromProvince != null">
+        from_province = #{record.fromProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromCity != null">
+        from_city = #{record.fromCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromArea != null">
+        from_area = #{record.fromArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromAddress != null">
+        from_address = #{record.fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toProvince != null">
+        to_province = #{record.toProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toCity != null">
+        to_city = #{record.toCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toArea != null">
+        to_area = #{record.toArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toAddress != null">
+        to_address = #{record.toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiverPhone != null">
+        receiver_phone = #{record.receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cleanAddress != null">
+        clean_address = #{record.cleanAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.heka != null">
+        heka = #{record.heka,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryDate != null">
+        delivery_date = #{record.deliveryDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryType != null">
+        delivery_type = #{record.deliveryType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.distributor != null">
+        distributor = #{record.distributor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.distributorNum != null">
+        distributor_num = #{record.distributorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.img != null">
+        img = #{record.img,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isPrint != null">
+        is_print = #{record.isPrint,jdbcType=CHAR},
+      </if>
+      <if test="record.sender != null">
+        sender = #{record.sender,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientName != null">
+        client_name = #{record.clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sortingNo != null">
+        sorting_no = #{record.sortingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.senderPhone != null">
+        sender_phone = #{record.senderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderPrice != null">
+        order_price = #{record.orderPrice,jdbcType=REAL},
+      </if>
+      <if test="record.deliveryCost != null">
+        delivery_cost = #{record.deliveryCost,jdbcType=REAL},
+      </if>
+      <if test="record.detail != null">
+        detail = #{record.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lng != null">
+        lng = #{record.lng,jdbcType=REAL},
+      </if>
+      <if test="record.lat != null">
+        lat = #{record.lat,jdbcType=REAL},
+      </if>
+      <if test="record.orderSource != null">
+        order_source = #{record.orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressUnit != null">
+        address_unit = #{record.addressUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payStatus != null">
+        pay_status = #{record.payStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update bd_order
+    set id = #{record.id,jdbcType=BIGINT},
+      gmt_create = #{record.gmtCreate,jdbcType=DATE},
+      gmt_modified = #{record.gmtModified,jdbcType=DATE},
+      modifier = #{record.modifier,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=CHAR},
+      mail_no = #{record.mailNo,jdbcType=VARCHAR},
+      out_biz_no = #{record.outBizNo,jdbcType=VARCHAR},
+      from_province = #{record.fromProvince,jdbcType=VARCHAR},
+      from_city = #{record.fromCity,jdbcType=VARCHAR},
+      from_area = #{record.fromArea,jdbcType=VARCHAR},
+      from_address = #{record.fromAddress,jdbcType=VARCHAR},
+      to_province = #{record.toProvince,jdbcType=VARCHAR},
+      to_city = #{record.toCity,jdbcType=VARCHAR},
+      to_area = #{record.toArea,jdbcType=VARCHAR},
+      to_address = #{record.toAddress,jdbcType=VARCHAR},
+      receiver_phone = #{record.receiverPhone,jdbcType=VARCHAR},
+      clean_address = #{record.cleanAddress,jdbcType=VARCHAR},
+      heka = #{record.heka,jdbcType=VARCHAR},
+      delivery_date = #{record.deliveryDate,jdbcType=VARCHAR},
+      delivery_type = #{record.deliveryType,jdbcType=VARCHAR},
+      distributor = #{record.distributor,jdbcType=VARCHAR},
+      distributor_num = #{record.distributorNum,jdbcType=VARCHAR},
+      `status` = #{record.status,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      img = #{record.img,jdbcType=VARCHAR},
+      is_print = #{record.isPrint,jdbcType=CHAR},
+      sender = #{record.sender,jdbcType=VARCHAR},
+      client_name = #{record.clientName,jdbcType=VARCHAR},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      sorting_no = #{record.sortingNo,jdbcType=VARCHAR},
+      sender_phone = #{record.senderPhone,jdbcType=VARCHAR},
+      order_price = #{record.orderPrice,jdbcType=REAL},
+      delivery_cost = #{record.deliveryCost,jdbcType=REAL},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      lng = #{record.lng,jdbcType=REAL},
+      lat = #{record.lat,jdbcType=REAL},
+      order_source = #{record.orderSource,jdbcType=VARCHAR},
+      address_unit = #{record.addressUnit,jdbcType=VARCHAR},
+      pay_status = #{record.payStatus,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.order.domain.BdOrder">
+    update bd_order
+    <set>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=DATE},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=DATE},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=CHAR},
+      </if>
+      <if test="mailNo != null">
+        mail_no = #{mailNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outBizNo != null">
+        out_biz_no = #{outBizNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fromProvince != null">
+        from_province = #{fromProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="fromCity != null">
+        from_city = #{fromCity,jdbcType=VARCHAR},
+      </if>
+      <if test="fromArea != null">
+        from_area = #{fromArea,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAddress != null">
+        from_address = #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toProvince != null">
+        to_province = #{toProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="toCity != null">
+        to_city = #{toCity,jdbcType=VARCHAR},
+      </if>
+      <if test="toArea != null">
+        to_area = #{toArea,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null">
+        to_address = #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPhone != null">
+        receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cleanAddress != null">
+        clean_address = #{cleanAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="heka != null">
+        heka = #{heka,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date = #{deliveryDate,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryType != null">
+        delivery_type = #{deliveryType,jdbcType=VARCHAR},
+      </if>
+      <if test="distributor != null">
+        distributor = #{distributor,jdbcType=VARCHAR},
+      </if>
+      <if test="distributorNum != null">
+        distributor_num = #{distributorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="isPrint != null">
+        is_print = #{isPrint,jdbcType=CHAR},
+      </if>
+      <if test="sender != null">
+        sender = #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        client_name = #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sortingNo != null">
+        sorting_no = #{sortingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="senderPhone != null">
+        sender_phone = #{senderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null">
+        order_price = #{orderPrice,jdbcType=REAL},
+      </if>
+      <if test="deliveryCost != null">
+        delivery_cost = #{deliveryCost,jdbcType=REAL},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=REAL},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=REAL},
+      </if>
+      <if test="orderSource != null">
+        order_source = #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="addressUnit != null">
+        address_unit = #{addressUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.order.domain.BdOrder">
+    update bd_order
+    set gmt_create = #{gmtCreate,jdbcType=DATE},
+      gmt_modified = #{gmtModified,jdbcType=DATE},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=CHAR},
+      mail_no = #{mailNo,jdbcType=VARCHAR},
+      out_biz_no = #{outBizNo,jdbcType=VARCHAR},
+      from_province = #{fromProvince,jdbcType=VARCHAR},
+      from_city = #{fromCity,jdbcType=VARCHAR},
+      from_area = #{fromArea,jdbcType=VARCHAR},
+      from_address = #{fromAddress,jdbcType=VARCHAR},
+      to_province = #{toProvince,jdbcType=VARCHAR},
+      to_city = #{toCity,jdbcType=VARCHAR},
+      to_area = #{toArea,jdbcType=VARCHAR},
+      to_address = #{toAddress,jdbcType=VARCHAR},
+      receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      clean_address = #{cleanAddress,jdbcType=VARCHAR},
+      heka = #{heka,jdbcType=VARCHAR},
+      delivery_date = #{deliveryDate,jdbcType=VARCHAR},
+      delivery_type = #{deliveryType,jdbcType=VARCHAR},
+      distributor = #{distributor,jdbcType=VARCHAR},
+      distributor_num = #{distributorNum,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      img = #{img,jdbcType=VARCHAR},
+      is_print = #{isPrint,jdbcType=CHAR},
+      sender = #{sender,jdbcType=VARCHAR},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      sorting_no = #{sortingNo,jdbcType=VARCHAR},
+      sender_phone = #{senderPhone,jdbcType=VARCHAR},
+      order_price = #{orderPrice,jdbcType=REAL},
+      delivery_cost = #{deliveryCost,jdbcType=REAL},
+      detail = #{detail,jdbcType=VARCHAR},
+      lng = #{lng,jdbcType=REAL},
+      lat = #{lat,jdbcType=REAL},
+      order_source = #{orderSource,jdbcType=VARCHAR},
+      address_unit = #{addressUnit,jdbcType=VARCHAR},
+      pay_status = #{payStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

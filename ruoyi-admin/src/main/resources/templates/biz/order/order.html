@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="job-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            原单号：<input type="text" name="outBizNo"/>
+                        </li>
+                        <li>
+                            收件人姓名：<input type="text" name="clientName"/>
+                        </li>
+                        <li>
+                            收件人手机：<input type="text" name="receiverPhone"/>
+                        </li>
+                        <li>
+                            小区/街道：<input type="text" name="addressUnit"/>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <label>订单状态： </label><select name="status">
+                            <option value="">所有</option>
+                            <option value="WAIT_ACCEPT">待接单</option>
+                            <option value="WAIT_PICKUP">待取货</option>
+                            <option value="HORSEMAN_IN_SHOP">骑士到店</option>
+                            <option value="DEVLIVERYING">配送中</option>
+                            <option value="TRANSFER_ORDER">指派单</option>
+                            <option value="DELIVERY_EXCEPTION">妥投异常之物品返回中</option>
+                            <option value="DELIVERY_EXCEPTION_FINISHED">妥投异常之物品返回完成</option>
+                        </select>
+                        </li>
+                        <li>
+                            <label>订单来源： </label><select name="orderSource">
+                            <option value="">所有</option>
+                            <option value="ZDB">转单宝</option>
+                            <option value="XM">寻梦</option></select>
+                        </li>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "biz/order"
+    var editFlag =true;// [[${@permission.hasPermi('system:menu:edit')}]];
+    var fahuoFlag = true;//[[${@permission.hasPermi('system:menu:edit')}]];
+    var removeFlag =true;// [[${@permission.hasPermi('system:menu:remove')}]];
+    $(function() {
+        var options = {
+            code: "outBizNo",
+            uniqueId: "outBizNo",
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/delivery/{id}/{rePost}",
+            detailUrl: prefix + "/detail/{id}/{rePost}",
+            search: false,
+            modalName: "订单",
+            columns: [
+                {
+                    field: 'img',
+                    title: '图片',
+                    align: "left",
+                    formatter: function(value, row, index) {
+                        if ($.common.isEmpty(row.img)) {
+                            return row.img;
+                        } else {
+                            return '<img width="55px" height="55px" src="'+row.img+'"></img>';
+                        }
+                    }
+                },
+                {
+                    field: 'sortingNo',
+                    title: '分拣编码',
+                    align: "left",
+                    formatter: function(value, row, index) {
+                        return '<p style="font-size:25px;color:red">'+row.sortingNo+'</p>';
+                    }
+                },
+                {
+                    field: 'clientName',
+                    title: '收件人',
+                    align: "left"
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    align: "left",
+                    width: '6%',
+                    formatter:function (value,row,index) {
+                        return '<a   href="#" onclick="openDetail(\''+row.outBizNo+'\')">'+row.status+'</a>';
+                    }
+                },
+                {
+                    field: 'orderPrice',
+                    title: '价格',
+                    align: "left"
+                },
+                {
+                    field: 'receiverPhone',
+                    title: '收件人电话',
+                    align: "left"
+                },
+                {
+                    field: 'outBizNo',
+                    title: '来源订单号',
+                    align: "left"
+                },
+                {
+                    field: 'toAddress',
+                    title: '收件地址',
+                    align: "left"
+                },
+                {
+                    field: 'addressUnit',
+                    title: '小区/街道',
+                    align: "left"
+                },
+                {
+                    field: 'deliveryDate',
+                    title: '送达时间',
+                    width:'10%',
+                    align: "left"
+                },
+                {
+                    field: 'detail',
+                    title: '明细',
+                    align: "left"
+                },
+                {
+                    field: 'heka',
+                    title: '贺卡',
+                    align: "left"
+                },
+                {
+                    title: '操作',
+                    width: '15%',
+                    align: "left",
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a data-toggle="modal" data=row class="btn btn-info btn-xs ' + fahuoFlag + '" href="#"  onclick="$.operate.devilery(\'' + row.id + '\',1)"><i class="fa fa-plus"></i>订单重发</a> ');
+                        actions.push('<a data-toggle="modal" data=row class="btn btn-info btn-xs ' + fahuoFlag + '" href="#"  onclick="delivery(\'' + row.id + '\')"><i class="fa fa-plus"></i>发货</a> ');
+                        if(row.status=='待接单'||row.status=='待取货'){
+
+                            actions.push('<a data-toggle="modal" data=row class="btn btn-info btn-xs ' + fahuoFlag + '" href="#"  onclick="cancel(\'' + row.id + '\')"><i class="fa fa-plus"></i>取消发货</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }
+            ]};
+        $.table.init(options);
+    });
+
+    function delivery(id){
+        $.operate.devilery( id ,0,800,680);
+
+    }
+
+
+
+    function cancel(id) {
+        $.modal.open("请选择取消原因", prefix+"/getReason/"+id, 450, 230);
+    }
+    function openDetail(id){
+        $.modal.open("订单详情", prefix+"/getDetail/"+id, 850, 530);
+    }
+
+
+</script>
+</body>
+</html>

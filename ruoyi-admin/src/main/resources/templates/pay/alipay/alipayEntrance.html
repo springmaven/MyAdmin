@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body>
+<input id="orderId" type="hidden" th:value="${orderId}">
+
+<div id="div_alipay_page"></div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    $(function(){
+        pay();
+    });
+    function pay() {
+        var orderId = $("#orderId").val();
+        $.ajax({
+            url: ctx +"biz/orderPay/getPayData/"+orderId,
+            type: "get",
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+                $("#div_alipay_page").append(res.data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        })
+    }
+</script>
+</body>
+</html>

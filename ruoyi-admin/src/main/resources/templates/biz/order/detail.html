@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m-t" id="delivery-form">
+		<div class="form-group">
+			<label class="col-sm-2 control-label">订单编号：</label>
+			<div class="form-control-static" th:text="${orderDetail.orderId}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">订单状态：</label>
+			<div class="form-control-static" th:text="${orderDetail.statusMsg}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">骑手姓名：</label>
+			<div class="form-control-static" th:text="${orderDetail.transporterName}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">骑手电话：</label>
+			<div class="form-control-static" th:text="${orderDetail.transporterPhone}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">配送费：</label>
+			<div class="form-control-static" th:text="${orderDetail.deliveryFee}"></div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">配送距离：</label>
+			<div class="form-control-static" th:text="${orderDetail.distance}/1000+'公里'"></div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">送达时间：</label>
+			<div class="form-control-static" th:text="${orderDetail.finishTime}"></div>
+		</div>
+
+
+</div>
+
+</form>
+</div>
+<div th:include="include :: footer"></div>
+<script>
+    $("#delivery-form").validate({
+        rules:{},
+        messages: {
+        },
+        submitHandler:function(form){
+            edit();
+        }
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            edit();
+        }
+    }
+
+    function edit() {
+        return true;
+    }
+
+</script>
+</body>
+</html>

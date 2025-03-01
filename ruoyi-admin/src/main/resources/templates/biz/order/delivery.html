@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m-t" id="delivery-form">
+		<input id="orderId" type="hidden" th:value="${order.id}">
+		<input id="rePost" type="hidden" th:value="${rePost}">
+		<div class="form-group">
+			<label class="col-sm-2 control-label">收件人姓名：</label>
+			<div class="form-control-static" th:text="${order.clientName}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">收件人电话：</label>
+			<div class="form-control-static" th:text="${order.receiverPhone}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">收件人地址：</label>
+			<div class="form-control-static" th:text="${order.toAddress}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">要求配送时间：</label>
+			<div class="form-control-static" th:text="${order.deliveryDate}"></div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">预估配送价格：</label>
+			<div class="form-control-static" th:text="${order.deliveryCost}+'元'"></div>
+		</div>
+
+
+		<div class="form-group">
+			<div class="form-control-static">
+				<label class="col-sm-2 control-label">图片：</label>
+				<img class="img-responsive" alt="App Logo" height="250px" width="250px" th:src="${order.img}" />
+			</div>
+		</div>
+</div>
+<div id="pay" style="display: none" class="wrapper wrapper-content animated fadeInRight ibox-content">
+	支付状态？
+</div>
+</form>
+</div>
+<div th:include="include :: footer"></div>
+<script>
+    $("#delivery-form").validate({
+        rules:{},
+        messages: {
+        },
+        submitHandler:function(form){
+            edit();
+        }
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            edit();
+        }
+    }
+
+    function edit() {
+        var orderId = $("#orderId").val();
+        var rePost = $("#rePost").val();
+        $.ajax({
+            cache : true,
+            type : "POST",
+            url : ctx + "biz/order/postDev",
+            data : {
+                "id": orderId,
+                "rePost":rePost
+            },
+            async : false,
+            error : function(request) {
+                $.modal.alertError("系统错误");
+            },
+            success : function(data) {
+
+                if(data.code==0 && data.msg =='noDelivery' ){
+                    // $.modal.close();
+                    $.operate.paySuccess(orderId,rePost,400,200);
+                    window.open(ctx+'biz/orderPay/alipayEntrance/'+orderId);
+
+                }else if(data.code==1){
+                    $.modal.alertError(data.msg);
+                }else{
+                    $.modal.close();
+                    $.modal.alertSuccess();
+                }
+            }
+        });
+    }
+
+</script>
+</body>
+</html>
